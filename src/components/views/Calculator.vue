@@ -32,8 +32,8 @@ export default {
     <div class="btn">2</div>
     <div class="btn">3</div>
     <div class="btn">+</div>
-    <div class="zero">0</div>
-    <div> class="btn".</div>
+    <div class="btn">0</div>
+    <div class="btn">.</div>
     <div class="btn">=</div>
 </div>
 
