@@ -1,69 +1,93 @@
 
 <template>
     <div class="calculator">
-        <div class="display">
-            {{ current || 0 }}
+      <div class="display">
+        <div v-if="state">
+          {{ current || 0 }}
         </div>
-        <div @click="clear" class="btn">C</div>
-        <div @click="sign" class="btn operator">+/-</div>
-        <div @click="percent" class="btn operator">%</div>
-        <div @click="append('/')" class="btn operator">/</div>
-        <div @click="append('7')" class="btn">7</div>
-        <div @click="append('8')" class="btn">8</div>
-        <div @click="append('9')" class="btn">9</div>
-        <div @click="append('*')" class="btn operator">*</div>
-        <div @click="append('4')" class="btn">4</div>
-        <div @click="append('5')" class="btn">5</div>
-        <div @click="append('6')" class="btn">6</div>
-        <div @click="append('-')" class="btn operator">-</div>
-        <div @click="append('1')" class="btn">1</div>
-        <div @click="append('2')" class="btn">2</div>
-        <div @click="append('3')" class="btn">3</div>
-        <div @click="append('+')" class="btn operator">+</div>
-        <div @click="append('0')" class="btn zero">0</div>
-        <div @click="dot" class="btn">.</div>
-        <div @click="equal" class="btn operator">=</div>
-        <div class="btn">History</div>
+        <div v-else>
+          <ul>
+            <li v-for="hist in history">
+              {{ hist }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div @click="clear" class="btn">C</div>
+      <div @click="sign" class="btn operator">+/-</div>
+      <div @click="percent" class="btn operator">%</div>
+      <div @click="append('/')" class="btn operator">/</div>
+      <div @click="append('7')" class="btn">7</div>
+      <div @click="append('8')" class="btn">8</div>
+      <div @click="append('9')" class="btn">9</div>
+      <div @click="append('*')" class="btn operator">*</div>
+      <div @click="append('4')" class="btn">4</div>
+      <div @click="append('5')" class="btn">5</div>
+      <div @click="append('6')" class="btn">6</div>
+      <div @click="append('-')" class="btn operator">-</div>
+      <div @click="append('1')" class="btn">1</div>
+      <div @click="append('2')" class="btn">2</div>
+      <div @click="append('3')" class="btn">3</div>
+      <div @click="append('+')" class="btn operator">+</div>
+      <div @click="append('0')" class="btn zero">0</div>
+      <div @click="dot" class="btn">.</div>
+      <div @click="equal" class="btn operator">=</div>
+      <div @click="showHistory()" class="btn">History</div>
     </div>
-</template>
-
-<script>
-export default {
+  </template>
+  
+  <script>
+  export default {
     name: 'Calculator',
     data() {
-        return {
-            current: '',
-            operator: null,
-        };
+      return {
+        current: '',
+        operator: null,
+        history: [],
+        solve: '',
+        state: true
+      };
     },
     methods: {
-        clear() {
-            this.current = '';
-        },
-        sign() {
-            this.current = this.current.charAt(0) === '-' ?
-            this.current.slice(1) : `-${this.current}`;
-        },
-        percent() {
-            this.current = `${parseFloat(this.current) / 100}`;
-        },
-        append(number) {
-            this.current = `${this.current}${number}`;
-        },
-        dot() {
-            if (this.current.indexOf('.') === -1) {
-                this.append('.');
-            }
-        },
-        equal() {
-            this.current = eval(this.current);
-        },
+      clear() {
+        this.current = '';
+        this.state = true;
+      },
+      sign() {
+        this.current = this.current.charAt(0) === '-' ?
+          this.current.slice(1) : `-${this.current}`;
+      },
+      percent() {
+        this.current = `${parseFloat(this.current) / 100}`;
+      },
+      append(number) {
+        this.current = `${this.current}${number}`;
+      },
+      dot() {
+        if (this.current.indexOf('.') === -1) {
+          this.append('.');
+        }
+      },
+      equal() {
+        this.solve = `${this.current} =`;
+        this.current = eval(this.current);
+        this.solve = `${this.solve} ${this.current}`;
+        this.history.push(this.solve);
+        console.log(this.solve);
+      },
+      showHistory() {
+        this.current = this.history;
+        this.state = false;
+      }
     },
-};
+  };
+  
+
 </script>
 
-
 <style>
+
+
 .calculator {
     cursor: pointer;
     width: 400px;
